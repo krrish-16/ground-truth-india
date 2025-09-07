@@ -1,13 +1,28 @@
-import { Droplets, Search, Menu } from 'lucide-react';
+import { Droplets, Search, Menu, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -38,15 +53,36 @@ const Layout = ({ children }: LayoutProps) => {
                 <span className="font-bold">DWLR Monitor</span>
               </div>
               <nav className="mt-6 flex flex-col space-y-3">
-                <Button variant="ghost" className="justify-start">
+                <Button 
+                  variant={isActive('/dashboard') ? "default" : "ghost"} 
+                  className="justify-start"
+                  onClick={() => navigate('/dashboard')}
+                >
                   Dashboard
                 </Button>
-                <Button variant="ghost" className="justify-start">
-                  Stations
+                <Button 
+                  variant={isActive('/alerts') ? "default" : "ghost"} 
+                  className="justify-start"
+                  onClick={() => navigate('/alerts')}
+                >
+                  Alerts & Reports
                 </Button>
-                <Button variant="ghost" className="justify-start">
-                  Analytics
-                </Button>
+                {user && (
+                  <div className="pt-4 border-t">
+                    <div className="flex items-center gap-2 px-3 py-2 mb-2">
+                      <User className="h-4 w-4" />
+                      <span className="text-sm font-medium">{user.name}</span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      className="justify-start w-full text-destructive hover:text-destructive"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </div>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
@@ -62,6 +98,24 @@ const Layout = ({ children }: LayoutProps) => {
                 />
               </div>
             </div>
+            
+            {/* User Menu */}
+            {user && (
+              <div className="hidden md:flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <User className="h-4 w-4" />
+                  <span>{user.name}</span>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </header>

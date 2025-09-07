@@ -37,7 +37,7 @@ const WaterLevelChart = ({ data, title, description }: WaterLevelChartProps) => 
             />
             <YAxis 
               className="text-xs fill-muted-foreground"
-              label={{ value: 'Water Level (m)', angle: -90, position: 'insideLeft' }}
+              label={{ value: 'Water Depth (m)', angle: -90, position: 'insideLeft' }}
             />
             <Tooltip 
               content={({ active, payload, label }) => {
