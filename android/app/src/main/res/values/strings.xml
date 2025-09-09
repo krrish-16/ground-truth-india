@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ground Truth India</string>
+    <string name="title_activity_main">Ground Truth India</string>
+    <string name="package_name">com.groundtruth.app</string>
+    <string name="custom_url_scheme">com.groundtruth.app</string>
+</resources>
